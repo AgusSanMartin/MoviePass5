@@ -6,7 +6,7 @@
                     <h2> Sucursales
                 </div>
                 <div class="col-3">
-                    <form method="get" action="<?php require_once "cine.php";/*echo FRONT_ROOT . "Cine/ShowAddView"*/ ?> ">
+                    <form method="get" action="<?php echo FRONT_ROOT . "cineController/ShowAdd" ?> ">
                         <button type"submit" class="btn btn-dark">Agregar nuevo cine</button>
                     </form>
                 </div>

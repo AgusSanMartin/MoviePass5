@@ -29,13 +29,11 @@
             
         }
 
-        public function Update($idCine,$nombre, $capacidad_total, $direccion, $valor_entrada){
-            
-            $cine = new Cine($idCine,$nombre, $capacidad_total, $direccion, $valor_entrada);
+        public function Update($idCine){
 
-            $this->cineDao->Update($cine);
+            $cine = $this->cineDao->GetById(idCine);
 
-            $this->GetById($cine->idCine);
+            require_once(VIEWS_PATH."updateCine.php");
         }
 
         public function Delete($id){
