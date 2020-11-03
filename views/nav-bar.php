@@ -15,10 +15,10 @@
         <a class="nav-link" href="#">Cines <span class="sr-only">(current)</span></a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="<?= FRONT_ROOT ?>/MoviesController/listMovies">Cartelera</a>
+        <a class="nav-link" href="<?= FRONT_ROOT ?>MoviesController/listMovies">Cartelera</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" href="<?= FRONT_ROOT ?>/CineController/getAll">Administar Cines</a>
+        <a class="nav-link" href="<?= FRONT_ROOT ?>CineController/getAll">Administrar Cines</a>
       </li>
       <li class="nav-item dropdown">
         <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -31,6 +31,28 @@
           <a class="dropdown-item" href="#">Something else here</a>
         </div>
       </li>
+
+      <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Generos
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <?php foreach($listGenres as $genre){ ?>
+
+            <form action="<?= FRONT_ROOT ?>MoviesController/listMovieByGenre" method="post">
+
+              <input type="hidden" value="<?= $genre->getId();?>" name="idGenre">
+
+              <button class="dropdown-item"  type="submit"> <?= $genre->getName();?> </button>
+              
+            </form>
+
+            <?php } ?>
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="#">Todo</a>
+        </div>
+      </li>
+      
 
       <li class="nav-item">
         <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
@@ -47,7 +69,7 @@
       <div class="userOff d-flex align-items-end">
         <a class="nav-link" href="#">Iniciar Sesion</a>
       
-        <a class="nav-link" href="<?= FRONT_ROOT ?>/CuentasController/registrarse">Crear Cuenta</a>
+        <a class="nav-link" href="<?= FRONT_ROOT ?>CuentasController/registrarse">Crear Cuenta</a>
      </div>
      
 

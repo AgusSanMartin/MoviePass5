@@ -11,13 +11,13 @@ class Cuenta
 	private $privilegios;
 	private $profile;
 
-	function __construct ($id="",$email="", $password="", $privilegios="") {
+	function __construct ($id=0,$email="", $password="", $privilegios="") {
 
 		$this->id = $id;
 		$this->email = $email;
 		$this->password = $password;
 		$this->privilegios = $privilegios;
-		$this->profile = null;
+		$this->profile = new Profile();
     }
 
 	/**

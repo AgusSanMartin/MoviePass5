@@ -12,15 +12,14 @@ class Profile{
     private $telefono;
     private $entradas;
 
-    function __construct ($dni = "",$nombre = "",
-                            $apellido = "",$direccion = "",$telefono = "", $entradas = array()) {
+    function __construct ($dni = "",$nombre = "", $apellido = "",$direccion = "",$telefono = "") {
 
 		$this->dni = $dni;
 		$this->nombre = $nombre;
 		$this->apellido = $apellido;
 		$this->direccion = $direccion;
         $this->telefono = $telefono;
-        $this->entradas = $entradas;
+        $this->entradas = null;
 
     }
 

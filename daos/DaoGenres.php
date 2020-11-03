@@ -34,10 +34,7 @@ class DaoGenres implements IDao
         //desarrollar
     }
 
-    //Funcion que retorna todas las peliculas por el idGenero
-    public function genreMovies($idGenre){
-
-    }
+    
 
     public function getAll()
     {
@@ -60,11 +57,11 @@ class DaoGenres implements IDao
     }
 
 
-    public function exist($nombre)
+    public function exist($genre)
     {
         try {
 
-            $query = "SELECT EXISTS ( SELECT * FROM " . DaoGenres::TABLENAME . " WHERE " . DaoGenres::TABLE_NOMBRE . " = " . "'" . $nombre . "'" . ");";
+            $query = "SELECT EXISTS ( SELECT * FROM " . DaoGenres::TABLENAME . " WHERE " . DaoGenres::TABLE_NOMBRE . " = " . "'" . $genre->getName() . "'" . ");";
 
             $this->connection = Connection::GetInstance();
 
@@ -138,8 +135,19 @@ class DaoGenres implements IDao
         }
     }
 
+    public function updateFromApi(){
+
+        $listGenre = $this->genresFromApi();
+        foreach($listGenre as $genre){
+            if(!($this->exist($genre))){
+                $this->add($genre);
+            }
+        }
+
+    }
+
     //Devuelve un arreglo de Genre que vienen de la API
-    public function genresFromApi()
+    private function genresFromApi()
     {
         $api_url = "https://api.themoviedb.org/3/genre/movie/list?api_key=" . KEY_TMDB . "&language=en-US";
         $api_json = file_get_contents($api_url);

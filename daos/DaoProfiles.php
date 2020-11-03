@@ -59,7 +59,7 @@ class DaoProfiles implements IDao
             }
             }
         }
-        //desarrollar
+      
     }
 
     public function update($profile){
@@ -171,10 +171,13 @@ class DaoProfiles implements IDao
         }
     }
 
+    //Recibe vacio el profile;
     public function add($cuenta)
     {
-        if ($cuenta instanceof Cuenta && !is_null($cuenta->getProfile()) && $cuenta->getProfile() instanceof Profile) {
+        echo "estoy en DaoProfiles";
 
+        if (($cuenta instanceof Cuenta) && ($cuenta->getProfile() instanceof Profile)) {
+            echo "Paso el filtro en el dao profile";
 
             try {
                 $query = "INSERT INTO " . DaoProfiles::TABLENAME . "( " . DaoProfiles::TABLE_DNI . " , " . DaoProfiles::TABLE_NOMBRE . " , " . DaoProfiles::TABLE_APELLIDO . " , " . DaoProfiles::TABLE_DIRECCION . " , "  . DaoProfiles::TABLE_TELEFONO . " , "  . DaoProfiles::TABLE_IDCUENTA . " ) " .

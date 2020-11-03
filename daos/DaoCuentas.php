@@ -5,6 +5,7 @@ namespace daos;
 use \Exception as Exception;
 use daos\Connection as Connection;
 use models\Cuenta as Cuenta;
+use daos\DaoProfiles as DaoProfiles;
 
 class DaoCuentas implements IDao
 {
@@ -51,6 +52,14 @@ class DaoCuentas implements IDao
 
                 $this->connection->ExecuteNonQuery($query, $parameters);
 
+                //el id se genera en la base de datos, por eso tengo que pedir nuevamente el objeto.
+                $object = $this->getByEmail($cuenta->getEmail());
+                $cuenta->setId($object->getId());
+            
+                $daoProfile = DaoProfiles::GetInstance();
+
+                $daoProfile->add($cuenta);
+
             } catch (Exception $ex) {
                 throw $ex;
             }
@@ -78,6 +87,7 @@ class DaoCuentas implements IDao
         }
     }
 
+    //Falta complementar el perfil
     public function getById($id)
     {
         try {

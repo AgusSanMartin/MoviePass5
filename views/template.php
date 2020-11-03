@@ -1,5 +1,5 @@
 <?php
-		echo '
+		/* echo '
 		<!DOCTYPE html>
 		<html>
 		  <head>
@@ -12,7 +12,7 @@
 
 		    </head>
 		    <body>'
-		    ;
+		    ; */
 		if(isset($_SESSION['cuenta']))
 		{
 			if ($_SESSION['cuenta']->getPrivilegios()==0)
@@ -29,5 +29,5 @@
 			}
 		}
 
-echo "</body>";
+/* echo "</body>"; */
 ?>

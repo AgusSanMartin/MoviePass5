@@ -24,7 +24,12 @@
                 <div class="form-group">
                         <label for="inputPassword4">Repetir Password</label>
                         <input type="password" class="form-control" id="inputPassword4" name="rPassword">
-                    </div>
+                </div>
+
+                <div class="form-group">
+                        <label for="inputEmail4">Dni</label>
+                        <input type="number" class="form-control" id="inputEmail4" name="dni">
+                </div>
 
                 <div class="form-row">
                     <div class="form-group col-md-6">
@@ -44,7 +49,7 @@
                     </div>
                     <div class="form-group col-md-6">
                         <label for="inputPassword4">Domicilio</label>
-                        <input type="text" class="form-control" id="inputPassword4" name="domicilio">
+                        <input type="text" class="form-control" id="inputPassword4" name="direccion">
                     </div>
                 </div>
                 

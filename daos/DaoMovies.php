@@ -38,6 +38,29 @@ class DaoMovies implements IDao
 
         return self::$instance;
     }
+    //*Modificar para que solo funcione con peliculas habilitadas
+    //Funcion que retorna todas las peliculas por el idGenero 
+    public function genreMovies(Genre $genre){
+        
+        $query = " SELECT x.idMovie
+            FROM moviesxgeneros AS x 
+            WHERE x.idGenero = " . $genre->getId() . " ;";
+
+        $this->connection = Connection::GetInstance();
+
+        $resultSet = $this->connection->Execute($query);
+
+        $movies = array();
+
+        foreach($resultSet as $dato){
+
+            $movie = $this->getById($dato[DaoMovies::TABLE_IDMOVIE]);
+            array_push($movies, $movie);
+
+        }
+       
+        return $movies;
+    }
 
     public function update($movie){
        
@@ -126,6 +149,31 @@ class DaoMovies implements IDao
     {
         try {
             $query = "SELECT * FROM " . DaoMovies::TABLENAME . " ;";
+
+            $this->connection = Connection::GetInstance();
+
+            $resultSet = $this->connection->Execute($query);
+
+            $array = $this->mapeo($resultSet);
+
+
+            if (!empty($array)) {
+
+                foreach ($array as $movie) {
+                    $movie->setGenre_ids($this->movieGenres($movie->getId()));
+                }
+            }
+
+            return $array;
+        } catch (Exception $ex) {
+            throw $ex;
+        }
+    }
+
+    public function getEnabled()
+    {
+        try {
+            $query = "SELECT * FROM " . DaoMovies::TABLENAME .  " WHERE " . DaoMovies::TABLE_ENABLED . " = " . "'" . true . "'" ." ;";
 
             $this->connection = Connection::GetInstance();
 
@@ -282,6 +330,33 @@ class DaoMovies implements IDao
         return $new_movie_list;
     }
 
+    public function updateFromApi(){
+
+        $newMovies = $this->moviesFromApi();
+        $this->disableMovies();
+
+        foreach($newMovies as $nMovie){
+
+            if($this->exist($nMovie) && !($this->enabled($nMovie->getId())) ){
+                $this->update($nMovie);
+            }else if (!($this->exist($nMovie))){
+                $this->add($nMovie);
+            }
+        }
+    }
+
+    //Deshabilita las peliculas que se encuentran en cartelera
+    private function disableMovies(){
+
+        $movies = $this->getEnabled();
+        
+        foreach($movies as $movie){
+            $movie->setEnabled(false);
+            $this->update($movie);
+        }
+        
+    }
+
     //agregarle a la query tambien por el titulo
     public function exist($movie)
     {   
@@ -301,6 +376,29 @@ class DaoMovies implements IDao
             throw $ex;
         }
         }else return false;
+    }
+
+    private function enabled($idMovie)
+    {   
+        
+        try {
+
+            $query = "SELECT EXISTS ( SELECT * FROM " . DaoMovies::TABLENAME . " WHERE " . DaoMovies::TABLE_IDMOVIE . " = " . "'" . $idMovie . "'" . " AND " . DaoMovies::TABLE_ENABLED . " = true" .");";
+
+            $this->connection = Connection::GetInstance();
+
+            $result = $this->connection->Execute($query);
+
+            /* if ($result[0][0] != 1) return false;
+            else return true; */
+
+            $resp = ($result[0][0] != 1) ? false : true;
+            return $resp;
+            
+        } catch (Exception $ex) {
+            throw $ex;
+        }
+        
     }
 
     public function toArray($object, $type = 0){
