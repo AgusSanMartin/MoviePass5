@@ -2,12 +2,12 @@
 
 namespace daos;
 
-use Models\Funcion;
-use Models\Movie;
-use Models\Room;
-use daos\DaoGenres;
+use Models\Funcion as funcion;
+use Models\Movie as movie;
+use Models\Room as room;
+use daos\DaoRooms as roomDao;
 use daos\Connection;
-use daos\DaoMovies;
+use daos\DaoMovies as movieDao;
 
 class ProjectionDAO {
     private $connection;
@@ -150,7 +150,9 @@ class ProjectionDAO {
         }
     }
 
-    public function GetAll($date) {
+    
+    public function GetAllByDate($date) {
+        $funcion_list =array();
 
         try
         {
@@ -163,7 +165,21 @@ class ProjectionDAO {
 
             if(!empty($resultSet)) {
                 foreach ($resultSet as $row) {
-                    return $this->mapeo($resultSet);
+                    return $this->leer($row);
+
+                    $idRoom = $row["idRoom"];
+                    $idMovie = $row["idMovie"];
+
+                    $DaoRoom = new roomDao();
+                    $room = $DaoRoom->GetById($idRoom);
+
+                    $DaoMovie = new movieDao();
+                    $movie = $DaoMovie->GetById($idMovie);
+
+                    $funcion->setRoom($room);
+                    $funcion->setMovie($movie);
+
+                    array_push($funcion_list,$funcion);
                 }
             }
         }
@@ -171,6 +187,55 @@ class ProjectionDAO {
         {
             throw $e;
         }
+        return funcion_list;
+    }
+
+    public function GetAll(){
+        $funcion_list =array();
+
+        try
+        {
+            $sql = "SELECT * FROM funciones f where datediff(f.date,(curdate()-1)) > 0 ORDER BY date";
+
+            $this->connection = Connection::getInstance();
+
+            $resultSet = $this->connection->Execute($sql, $parameters);
+
+            if(!empty($resultSet)) {
+                foreach ($resultSet as $row) {
+                    return $this->leer($row);
+
+                    $idRoom = $row["idRoom"];
+                    $idMovie = $row["idMovie"];
+
+                    $DaoRoom = new roomDao();
+                    $room = $DaoRoom->GetById($idRoom);
+
+                    $DaoMovie = new movieDao();
+                    $movie = $DaoMovie->GetById($idMovie);
+
+                    $funcion->setRoom($room);
+                    $funcion->setMovie($movie);
+
+                    array_push($funcion_list,$funcion);
+                }
+            }
+        }
+        catch (PDOException $e)
+        {
+            throw $e;
+        }
+        return funcion_list;
+    }
+
+    public function leer($row){
+        $funcion = new Funcion();
+
+        $funcion->setId($row["id"]);
+        $funcion->setDate($row["date"]);
+        $funcion->setHour($row["hour"]);
+
+        return $funcion;
     }
 
 }
